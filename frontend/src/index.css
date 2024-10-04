@@ -1,0 +1,46 @@
+/* Glassmorphism styling */
+.glass-effect {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dashboard {
+    padding: 20px;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.tenant-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 2%;
+  text-align: center;
+  transition: box-shadow 0.3s;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.tenant-card:hover {
+  box-shadow: 0 4px 40px rgba(57, 255, 255, 0.1);
+}
+
+.tenant-avatar img {
+  border-radius: 50%;
+  width: 100px; /* Adjust as necessary */
+  height: 100px; /* Adjust as necessary */
+  object-fit: cover;
+}
+
+.tenant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 16px; /* Space between cards */
+  padding: 20px; /* Padding around the grid */
+}

@@ -1,0 +1,40 @@
+pg-management-backend/
+│
+├── config/
+│   └── db.js                 # Database configuration (MongoDB connection)
+│
+├── controllers/
+│   ├── tenantController.js    # Controller for tenant-related logic
+│   ├── paymentController.js   # Controller for handling payments
+│   ├── foodController.js      # Controller for managing food records
+│   ├── utilityController.js   # Controller for handling utility charges
+│   └── reportController.js    # Controller for generating monthly summaries
+│
+├── models/
+│   ├── Tenant.js              # Tenant model schema
+│   ├── Payment.js             # Payment model schema
+│   └── Utility.js             # Utility model schema
+│
+├── routes/
+│   ├── tenantRoutes.js        # Routes for tenant-related API calls
+│   ├── paymentRoutes.js       # Routes for payment-related API calls
+│   ├── foodRoutes.js          # Routes for food-related API calls
+│   ├── utilityRoutes.js       # Routes for utility-related API calls
+│   └── reportRoutes.js        # Routes for report-related API calls
+│
+├── middlewares/
+│   └── errorHandler.js        # Error handling middleware (e.g., validation errors, etc.)
+│
+├── services/
+│   ├── paymentService.js      # Payment logic (calculations, validations)
+│   ├── foodService.js         # Logic for food consumption records
+│   ├── utilityService.js      # Utility billing and logic
+│   └── reportService.js       # Logic for generating monthly summary reports
+│
+├── utils/
+│   └── helpers.js             # Helper functions (e.g., date formatting, rent calculations)
+│
+├── app.js                     # Main entry point of the application (initializes the server, middleware)
+├── package.json               # Project dependencies and scripts
+├── .env                       # Environment variables (like MongoDB URI)
+└── README.md                  # Project documentation
