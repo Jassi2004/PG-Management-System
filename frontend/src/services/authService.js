@@ -16,13 +16,15 @@ export const registerTenant = async (formData) => {
   return response.data;
 };
 
-export const sendOtp = async (data) => {
-  const response = await axios.post('http://localhost:5000/api/tenants/send-otp', data);
+export const sendOtp = async (email) => {
+  const response = await axios.post('http://localhost:5000/api/tenants/send-otp', email);
   return response.data;
 };
 
 export const verifyOtp = async (data) => {
   const response = await axios.post('http://localhost:5000/api/tenants/verify-otp', data);
+  console.log(response);
+  
   return response.data;
 };
 

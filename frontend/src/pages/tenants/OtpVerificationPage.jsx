@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Container, TextField, Button, Typography, Box } from '@mui/material';
 import { verifyOtp, resendOtp } from '../../services/authService'; // Import the resendOtp function
+import { getTenantIdFromEmail } from '../../services/api';
 
 function OtpVerificationPage() {
   const [otp, setOtp] = useState('');
@@ -23,9 +24,19 @@ function OtpVerificationPage() {
     e.preventDefault();
     setLoading(true);
 
+    // console.log("email , otp => ", email, otp);
+    
+
     try {
-      await verifyOtp({ email, otp }); // Call backend API to verify OTP
-      navigate('/tenant/dashboard'); // Redirect to the dashboard upon success
+      const response = await verifyOtp({ email, otp }); // Call backend API to verify OTP
+      console.log("rsponse by jassi=> ",response.token);
+
+      console.log("email: ", email);
+      
+      const tenantId = await getTenantIdFromEmail(email);
+      console.log("tenantId: ", tenantId);
+      
+      navigate(`/tenant/dashboard/${tenantId.tenantId}`); // Redirect to the dashboard upon success
     } catch (err) {
       setError('Invalid OTP. Please try again.', err);
     } finally {

@@ -5,6 +5,10 @@ const paymentController = require('../controllers/paymentController');
 // Get all payments
 router.get('/', paymentController.getAllPayments);
 
+// Get payments by tenant ID
+router.get('/tenant/:id', paymentController.getPaymentsByTenantId);
+
+
 // Get a specific payment by ID
 router.get('/:id', paymentController.getPaymentById);
 

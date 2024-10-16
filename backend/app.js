@@ -5,10 +5,12 @@ const connectDB = require('./config/db'); // Import the connectDB function
 const tenantRoutes = require('./routes/tenantRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const foodRoutes = require('./routes/foodRoutes');
+const newPaymentRoutes = require('./routes/newPaymentRoutes');
 // const utilityRoutes = require('./routes/utilityRoutes');
-const summaryRoutes = require('./routes/monthlySummaryRoutes');
+const summaryRoutes = require('./routes/newPaymentRoutes');
 const adminRoutes = require('./routes/adminRoutes'); // Optional
 const cors = require('cors');
+const { newPayment } = require('./controllers/newPayment');
 
 
 dotenv.config();
@@ -38,9 +40,11 @@ app.use('/api/summaries', summaryRoutes);
 
 app.use('/api/admin', adminRoutes); // Optional
 
+app.use('/api/newPayment' , newPaymentRoutes);
 
 
-const PORT = process.env.PORT || 5000;
+
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

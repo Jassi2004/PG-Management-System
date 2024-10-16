@@ -24,7 +24,7 @@ function TenantLoginPage() {
       // Redirect to OTP verification page with email in state
       navigate('/tenant/otp-verification', { state: { email } });
     } catch (err) {
-      setError('Login failed. Make sure the email is correct or try again later.');
+      setError('Login failed. Make sure the email is correct or try again later.', err);
     } finally {
       setLoading(false);
     }
@@ -72,7 +72,7 @@ function TenantLoginPage() {
                 onClick={handleRegister}
                 sx={{ textTransform: 'none', fontSize: '14px', padding: '10px' }}
               >
-                Don't have an account? Register as a new tenant
+                Don not have an account? Register as a new tenant
               </Button>
             </Grid>
           </Grid>

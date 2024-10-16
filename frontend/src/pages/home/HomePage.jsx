@@ -11,7 +11,7 @@ function HomePage() {
 
       {/* Description Section */}
       <Typography variant="body1" color="textSecondary" paragraph>
-        Our PG Management System helps you manage tenants, track payments, and monitor food and utility charges efficiently. 
+        Our PG Management System helps you manage tenants, track payments, and monitor food and utility charges efficiently.
         This platform simplifies the administration of PG accommodations and ensures smooth tenant relations with secure login options.
       </Typography>
 
@@ -19,16 +19,11 @@ function HomePage() {
       <Box sx={{ marginTop: 4 }}>
         <Grid container spacing={4} justifyContent="center">
           <Grid item>
-            <Button
-              component={RouterLink}
-              to="/admin/login"
-              variant="contained"
-              color="primary"
-              size="large"
-            >
-              Admin Login
-            </Button>
+
           </Grid>
+
+
+
           <Grid item>
             <Button
               component={RouterLink}
@@ -40,7 +35,31 @@ function HomePage() {
               Tenant Login
             </Button>
           </Grid>
+
+          <Grid item>
+            <Button
+              component={RouterLink}
+              to="/tenant/register"
+              variant="contained"
+              color="secondary"
+              size="large"
+            >
+              Tenant Register
+            </Button>
+          </Grid>
         </Grid>
+      </Box>
+
+      <Box sx={{ marginTop: 8, paddingTop: 4 }}>
+        <Button
+          component={RouterLink}
+          to="/admin/login"
+          variant="contained"
+          color="primary"
+          size="large"
+        >
+          Admin Login
+        </Button>
       </Box>
 
       {/* Footer */}

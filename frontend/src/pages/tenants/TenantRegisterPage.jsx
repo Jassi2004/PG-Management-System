@@ -1,7 +1,13 @@
 import { useState } from 'react';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
-import { Container, Typography, TextField, Button, Link, Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import { registerTenant, sendOtp } from '../../services/authService'; // Make sure this function is properly defined in your service
+import { Container, Typography, TextField, Button, Link, Box, FormControl, InputLabel, Select, MenuItem, Chip } from '@mui/material';
+import { registerTenant, sendOtp } from '../../services/authService';
+
+const MEAL_OPTIONS = [
+  { value: 'none', label: 'No Food', charge: 0 },
+  { value: 'breakfast', label: 'Breakfast', charge: 1500 },
+  { value: 'dinner', label: 'Dinner', charge: 1500 },
+];
 
 function TenantRegisterPage() {
   const [formData, setFormData] = useState({
@@ -10,15 +16,37 @@ function TenantRegisterPage() {
     dateOfJoining: '',
     roomNumber: '',
     monthlyRent: '',
-    meals: '', // Meal preferences
-    email: '', // Email field
+    email: '',
+    // meals: [], // We won't store meals in the form data
+    fixedMealCharges: 0, // Fixed meal charges based on selections
   });
+  const [selectedMeals, setSelectedMeals] = useState([]); // Separate state for selected meals
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false); // For loading state
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    if (name === 'meals') {
+      const updatedMeals = value;
+      setSelectedMeals(updatedMeals); // Update the selected meals
+      setFormData((prevData) => ({
+        ...prevData,
+        fixedMealCharges: calculateMealCharge(updatedMeals), // Calculate fixed charges based on updated meals
+      }));
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+
+  const calculateMealCharge = (meals) => {
+    // Calculate the total meal charge based on selected meals
+    let totalCharge = 0;
+    if (meals.includes('breakfast')) totalCharge += 1500;
+    if (meals.includes('dinner')) totalCharge += 1500;
+
+    return totalCharge;
   };
 
   const handleSubmit = async (e) => {
@@ -26,16 +54,22 @@ function TenantRegisterPage() {
     setLoading(true);
 
     // Validate that all required fields are filled
-    if (!formData.name || !formData.phoneNumber || !formData.dateOfJoining || !formData.monthlyRent || !formData.meals || !formData.email) {
+    if (!formData.name || !formData.phoneNumber || !formData.dateOfJoining || !formData.monthlyRent || !formData.email) {
       setError('All fields are required!');
       setLoading(false);
       return;
     }
 
+    // Send the form data to the backend including fixedMealCharges
     try {
-      await registerTenant(formData);
+      await registerTenant({
+        ...formData,
+        monthlyRent: parseInt(formData.monthlyRent),
+        fixedMealCharges: parseInt(formData.fixedMealCharges), // Add meal charges to the monthly rent
+        // meals: selectedMeals // Only send selected meals if necessary
+      });
       sendOtp({ email: formData.email });
-      navigate('/tenant/otp-verification', { state: { email: formData.email } }); // Pass the email to the OTP verification page
+      navigate('/tenant/otp-verification', { state: { email: formData.email } });
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed');
     } finally {
@@ -97,15 +131,6 @@ function TenantRegisterPage() {
           />
           <TextField
             margin="normal"
-            fullWidth
-            id="roomNumber"
-            label="Room Number"
-            name="roomNumber"
-            value={formData.roomNumber}
-            onChange={handleChange}
-          />
-          <TextField
-            margin="normal"
             required
             fullWidth
             id="monthlyRent"
@@ -115,19 +140,30 @@ function TenantRegisterPage() {
             value={formData.monthlyRent}
             onChange={handleChange}
           />
+
+          {/* Meal Selection Field */}
           <FormControl fullWidth margin="normal" required>
-            <InputLabel id="meals-label">Meals</InputLabel>
+            <InputLabel id="meal-select-label">Meals</InputLabel>
             <Select
-              labelId="meals-label"
+              labelId="meal-select-label"
               id="meals"
               name="meals"
-              value={formData.meals}
+              multiple
+              value={selectedMeals}
               onChange={handleChange}
+              renderValue={(selected) => (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  {selected.map((value) => (
+                    <Chip key={value} label={MEAL_OPTIONS.find(option => option.value === value)?.label} />
+                  ))}
+                </Box>
+              )}
             >
-              <MenuItem value="">None</MenuItem>
-              <MenuItem value="breakfast">Breakfast</MenuItem>
-              <MenuItem value="dinner">Dinner</MenuItem>
-              <MenuItem value="all">All Meals</MenuItem>
+              {MEAL_OPTIONS.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
 

@@ -1,6 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const tenantController = require('../controllers/tenantController');
+const PreviousTenant = require('../models/PreviousTenant');
+
+
+// In routes/tenantRoutes.js
+router.get('/previous-tenants', async (req, res) => {
+    try {
+        const previousTenants = await PreviousTenant.find();
+        res.json(previousTenants);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
 
 // Get all tenants
 router.get('/', tenantController.getAllTenants);
@@ -35,6 +49,8 @@ router.post('/verify-otp', tenantController.verifyOtp);
 // resend otp
 router.post('/resend-otp', tenantController.resendOtp);
 
+// get TenantId From Email
+router.post('/getTenantIdFromEmail', tenantController.getTenantIdFromEmail);
 
 
 

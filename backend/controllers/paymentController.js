@@ -1,5 +1,10 @@
 // backend/controllers/paymentController.js
 const Payment = require('../models/Payment'); // Import your Payment model
+const Tenant = require('../models/Tenant');
+
+
+
+
 
 // Get all payments
 exports.getAllPayments = async (req, res) => {
@@ -14,7 +19,11 @@ exports.getAllPayments = async (req, res) => {
 // Get payment by ID
 exports.getPaymentById = async (req, res) => {
     try {
+        console.log(req.params.id);
+
         const payment = await Payment.findById(req.params.id);
+        console.log(payment);
+
         if (!payment) {
             return res.status(404).json({ message: 'Payment not found' });
         }
@@ -24,14 +33,51 @@ exports.getPaymentById = async (req, res) => {
     }
 };
 
-// Add a new payment
-exports.addPayment = async (req, res) => {
-    const payment = new Payment(req.body);
+// Get payments by Tenant ID
+exports.getPaymentsByTenantId = async (req, res) => {
     try {
-        const savedPayment = await payment.save();
-        res.status(201).json(savedPayment);
+        const tenantId = req.params.id; // Get tenantId from request parameters
+        // console.log(`Searching payments for tenantId: ${tenantId}`);
+
+        const payments = await Payment.find({ tenantId }); // Search by tenantId
+        console.log(payments);
+
+        if (!payments || payments.length === 0) {
+            return res.status(404).json({ message: 'No payments found for this tenant' });
+        }
+
+        res.json(payments);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        console.error('Error fetching payments:', error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+// Add a new payment
+
+exports.addPayment = async (req, res) => {
+    const { tenantId, date, amount, method } = req.body;
+
+    try {
+        const payment = new Payment({
+            tenantId,
+            date,
+            amount,
+            method,
+        });
+
+        await payment.save();
+
+        // Optionally, update the tenant's balance
+        const tenant = await Tenant.findById(tenantId);
+        tenant.balance -= amount; // Assuming payment reduces balance
+        await tenant.save();
+
+        res.status(201).json({ message: 'Payment logged successfully', payment });
+    } catch (error) {
+        console.error('Error logging payment:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 };
 

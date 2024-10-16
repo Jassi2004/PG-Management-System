@@ -18,3 +18,4 @@ export const updateTenant = async (tenantId, tenantData) => {
 export const deleteTenant = async (tenantId) => {
   return await axios.delete(`${BASE_URL}/tenants/${tenantId}`);
 };
+x

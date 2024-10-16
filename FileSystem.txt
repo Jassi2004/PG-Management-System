@@ -1,4 +1,4 @@
-pg-management-backend/
+backend/
 │
 ├── config/
 │   └── db.js                 # Database configuration (MongoDB connection)
