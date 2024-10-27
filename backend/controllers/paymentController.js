@@ -40,7 +40,7 @@ exports.getPaymentsByTenantId = async (req, res) => {
         // console.log(`Searching payments for tenantId: ${tenantId}`);
 
         const payments = await Payment.find({ tenantId }); // Search by tenantId
-        console.log(payments);
+        // console.log(payments);
 
         if (!payments || payments.length === 0) {
             return res.status(404).json({ message: 'No payments found for this tenant' });

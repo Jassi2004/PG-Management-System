@@ -4,30 +4,15 @@ const newPaymentController = require('../controllers/newPayment'); // Assuming y
 const { sendPaymentNotificationEmail } = require('../utils/sendPaymentNotificationEmail');
 
 // Get all monthly summaries
-router.get('/orders', newPaymentController.newPayment);
+// router.get('/orders', newPaymentController.newPayment);
 
-router.get('/:paymentId', newPaymentController.getPayment)
+// router.get('/:paymentId', newPaymentController.getPayment)
+
+router.get('/qr-code', newPaymentController.qrCodeGenerator)
 
 
 // Endpoint to send payment notification email
-router.post('/send-payment-notification', async (req, res) => {
-    const { adminEmail, tenantName, amount } = req.body;
-
-    try {
-        const success = await sendPaymentNotificationEmail(adminEmail, tenantName, amount);
-
-        if (success) {
-            return res.status(200).json({ message: 'Notification email sent successfully.' });
-        } else {
-            return res.status(500).json({ message: 'Failed to send notification email.' });
-        }
-    } catch (error) {
-        console.error('Error sending email:', error);
-        return res.status(500).json({ message: 'Internal Server Error' });
-    }
-});
-
-
+router.post('/send-payment-notification', newPaymentController.sendPaymentNotification)
 
 
 module.exports = router;

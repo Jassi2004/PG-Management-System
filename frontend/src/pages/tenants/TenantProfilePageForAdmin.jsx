@@ -236,7 +236,8 @@ const TenantProfilePageForAdmin = () => {
                 { label: 'Date of Joining', name: 'dateOfJoining', type: 'date' },
                 { label: 'Room Number', name: 'roomNumber' },
                 { label: 'Monthly Rent', name: 'monthlyRent', type: 'number' },
-                { label: 'Balance', name: 'balance', type: 'number', disabled: true },
+                { label: 'Balance', name: 'balance', type: 'number' },
+                { label: 'Fixed Meal Charges', name: 'fixedMealCharges', type: 'number' },
               ].map((field) => (
                 <Grid item xs={12} sm={6} key={field.name}>
                   <TextField

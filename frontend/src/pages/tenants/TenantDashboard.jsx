@@ -1,15 +1,15 @@
+// src/pages/TenantDashboard/TenantDashboard.js
 import { useEffect, useState } from 'react';
 import {
-  Box, Grid2, Typography, Avatar, TextField, Button,
+  Box, Grid, Typography, Avatar, TextField, Button,
   useTheme, IconButton, Divider
 } from '@mui/material';
-import { styled, keyframes } from '@mui/material/styles'; // Import keyframes for animation
-import { useParams } from 'react-router-dom';
+import { styled, keyframes } from '@mui/material/styles';
+import { useParams, useNavigate } from 'react-router-dom';
 import { fetchTenantData, updateTenantDataByTenant } from '../../services/api';
 import {
   Phone, Email, CalendarToday, AttachMoney, Home, Edit, Save
 } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
 import PaymentLogs from '../paymentPage/PaymentLogs';
 
 // Animation for flashing button (red -> darkred)
@@ -63,11 +63,6 @@ const InfoItem = ({ icon, label, value, editable, name, onChange, editMode }) =>
 
 const TenantDashboard = () => {
   const navigate = useNavigate();
-
-  const paymentPageNavigation = async () => {
-    navigate('/new-payment', { state: { amount: tenantData.balance } });
-  };
-
   const { tenantId } = useParams();
   const [tenantData, setTenantData] = useState(null);
   const [editMode, setEditMode] = useState(false);
@@ -80,7 +75,6 @@ const TenantDashboard = () => {
       try {
         const data = await fetchTenantData(tenantId);
         setTenantData(data);
-        console.log(tenantData);
 
         // Calculate overdue days if balance > 0
         const today = new Date();
@@ -95,6 +89,10 @@ const TenantDashboard = () => {
     };
     getTenant();
   }, [tenantId]);
+
+  const paymentPageNavigation = () => {
+    navigate('/new-payment', { state: { amount: tenantData.balance } });
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -118,155 +116,53 @@ const TenantDashboard = () => {
   const isOverdue = overdueDays > 0 && tenantData.balance > 0;
 
   return (
-    <Box
-      sx={{
-        minHeight: '80vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: theme.palette.background.default,
-        transition: 'background-color 0.3s ease-in-out',
-        padding: 4,
-      }}
-    >
-      <Box
-        sx={{
-          width: '100%',
-          maxWidth: '1200px',
-          backgroundColor: theme.palette.background.paper,
-          borderRadius: 4,
-          boxShadow: theme.shadows[4],
-          overflow: 'hidden',
-        }}
-      >
-        <Box
-          sx={{
-            p: 3,
-            background: theme.palette.primary.main,
-            color: theme.palette.primary.contrastText,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Typography variant="h4" fontWeight="bold">
-            Tenant Dashboard
-          </Typography>
-
+    <Box sx={{ minHeight: '80vh', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: theme.palette.background.default, padding: 4 }}>
+      <Box sx={{ width: '100%', maxWidth: '1200px', backgroundColor: theme.palette.background.paper, borderRadius: 4, boxShadow: theme.shadows[4], overflow: 'hidden' }}>
+        <Box sx={{ p: 3, background: theme.palette.primary.main, color: theme.palette.primary.contrastText, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography variant="h4" fontWeight="bold">Tenant Dashboard</Typography>
           <Box display="flex" alignItems="center" gap={2}>
             {isOverdue && (
-              <FlashingButton
-                onClick={paymentPageNavigation}
-              >
+              <FlashingButton onClick={paymentPageNavigation}>
                 Pay Now - {overdueDays} day(s) overdue!
               </FlashingButton>
             )}
           </Box>
         </Box>
-
         <Box sx={{ p: 4 }}>
-
-
-          <Grid2 container spacing={4}>
-            <Grid2 item xs={12} md={4}>
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={4}>
               <StyledSection>
                 <Box display="flex" flexDirection="column" alignItems="center" mb={4}>
-                  <Avatar
-                    sx={{
-                      width: 120,
-                      height: 120,
-                      bgcolor: theme.palette.secondary.main,
-                      fontSize: '3rem',
-                      mb: 2,
-                    }}
-                  >
+                  <Avatar sx={{ width: 120, height: 120, bgcolor: theme.palette.secondary.main, fontSize: '3rem', mb: 2 }}>
                     {tenantData?.name?.charAt(0).toUpperCase()}
                   </Avatar>
-
-                  <InfoItem
-                    value={tenantData.name}
-                    editable={true}
-                    name="name"
-                    onChange={handleChange}
-                    editMode={editMode}
-                  />
-
-                  <Typography variant="subtitle1" color="textSecondary">
-                    Tenant ID: {tenantId}
-                  </Typography>
-                  <IconButton
-                    onClick={() => (editMode ? handleSave() : setEditMode(true))}
-                    color="primary"
-                  >
+                  <InfoItem value={tenantData.name} editable={true} name="name" onChange={handleChange} editMode={editMode} />
+                  <Typography variant="subtitle1" color="textSecondary">Tenant ID: {tenantId}</Typography>
+                  <IconButton onClick={() => (editMode ? handleSave() : setEditMode(true))} color="primary">
                     {editMode ? <Save /> : <Edit />}
                   </IconButton>
                 </Box>
                 <Divider sx={{ my: 2 }} />
-                <InfoItem
-                  icon={<Phone color="primary" />}
-                  label="Phone Number"
-                  value={tenantData.phoneNumber}
-                  editable={true}
-                  name="phoneNumber"
-                  onChange={handleChange}
-                  editMode={editMode}
-                />
-                <InfoItem
-                  icon={<Email color="primary" />}
-                  label="Email"
-                  value={tenantData.email}
-                  editable={true}
-                  name="email"
-                  onChange={handleChange}
-                  editMode={editMode}
-                />
+                <InfoItem icon={<Phone color="primary" />} label="Phone Number" value={tenantData.phoneNumber} editable={true} name="phoneNumber" onChange={handleChange} editMode={editMode} />
+                <InfoItem icon={<Email color="primary" />} label="Email" value={tenantData.email} editable={true} name="email" onChange={handleChange} editMode={editMode} />
               </StyledSection>
-            </Grid2>
-
-            {/* This is the new section that matches the height and width of the first box */}
-            <Grid2 item minWidth={350} xs={16} md={4}>
+            </Grid>
+            <Grid item xs={12} md={4}>
               <StyledSection>
-                <Grid2 container spacing={4}>
-                  <Grid2 item xs={12} sm={6}>
-                    <InfoItem
-                      icon={<CalendarToday color="primary" />}
-                      label="Date of Joining"
-                      value={new Date(tenantData.dateOfJoining).toLocaleDateString()}
-                      editable={false}
-                    />
-                    <InfoItem
-                      icon={<AttachMoney color="primary" />}
-                      label="Monthly Rent"
-                      value={`₹${tenantData.monthlyRent}`}
-                      editable={false}
-                    />
-                    <InfoItem
-                      icon={<AttachMoney color="primary" />}
-                      label="Balance Due"
-                      value={`₹${tenantData.balance}`}
-                      editable={false}
-                    />
-                    <InfoItem
-                      icon={<Home color="primary" />}
-                      label="Room Number"
-                      value={tenantData.roomNumber}
-                      editable={false}
-                    />
-                  </Grid2>
-                </Grid2>
+                <Grid container spacing={4}>
+                  <Grid item xs={12} sm={6}>
+                    <InfoItem icon={<CalendarToday color="primary" />} label="Date of Joining" value={new Date(tenantData.dateOfJoining).toLocaleDateString()} editable={false} />
+                    <InfoItem icon={<AttachMoney color="primary" />} label="Monthly Rent" value={`₹${tenantData.monthlyRent}`} editable={false} />
+                    <InfoItem icon={<AttachMoney color="primary" />} label="Balance Due" value={`₹${tenantData.balance}`} editable={false} />
+                    <InfoItem icon={<Home color="primary" />} label="Room Number" value={tenantData.roomNumber} editable={false} />
+                  </Grid>
+                </Grid>
               </StyledSection>
-            </Grid2>
-
-            <Grid2 item minWidth={350} xs={16} md={4}>
+            </Grid>
+            <Grid item xs={12} md={4}>
               <PaymentLogs tenantId={tenantId} />
-            </Grid2>
-
-
-
-          </Grid2>
-
-
-
+            </Grid>
+          </Grid>
         </Box>
       </Box>
     </Box>

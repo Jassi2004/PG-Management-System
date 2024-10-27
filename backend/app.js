@@ -23,10 +23,10 @@ connectDB(); // Call the function to connect to the database
 
 // Use the cors middleware
 app.use(cors({
-    origin: 'http://localhost:5173', // Allow requests from your frontend
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow the necessary HTTP methods
-    credentials: true, // Enable credentials (optional)
-  }));
+  origin: 'http://localhost:5173', // Allow requests from your frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow the necessary HTTP methods
+  credentials: true, // Enable credentials (optional)
+}));
 
 app.use('/api/tenants', tenantRoutes);
 
@@ -40,11 +40,13 @@ app.use('/api/summaries', summaryRoutes);
 
 app.use('/api/admin', adminRoutes); // Optional
 
-app.use('/api/newPayment' , newPaymentRoutes);
+app.use('/api/newPayment', newPaymentRoutes);
+
+// app.use('/api/qr-code',);
 
 
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

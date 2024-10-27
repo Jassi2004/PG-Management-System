@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
-import { Box, Button, TextField, Typography, Snackbar } from '@mui/material';
+import { Box, Button, Typography, Snackbar } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
 import { sendPaymentNotification } from '../../services/paymentService';
+import QRCodeComponent from './QRCodeComponent'; // Make sure to import QRCodeComponent
 
 const NewPaymentPage = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // Hook to access the location object
-  const [amount, setAmount] = useState(location.state?.amount || ''); // Get amount from state
+  const location = useLocation();
+  const [amount, setAmount] = useState(location.state?.amount || '');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-
-      // Send notification to the admin after a successful payment
       await sendPaymentNotification('bedijaskirat2004@gmail.com', 'Tenant Name', amount);
       setSnackbarMessage('Payment Successful! Admin notified.');
       setSnackbarOpen(true);
@@ -43,12 +40,16 @@ const NewPaymentPage = () => {
         <Typography variant="h4" gutterBottom>
           New Payment
         </Typography>
-        <Typography variant="h7" gutterBottom>
-          Follow the steps.. <br />
-          1. Make The Payment on the below given QR Code. <br />
-          2. Click on the submit button below. <br />
-          3. Wait for the Admin to approve.
-        </Typography>
+        <div> {/* Changed from <p> to <div> */}
+          <Typography variant="body1" gutterBottom>
+            Follow the steps:
+          </Typography>
+          <ol>
+            <li>Make the payment using the QR code below.</li>
+            <li>Click on the "Inform Admin" button.</li>
+            <li>Wait for the Admin to approve.</li>
+          </ol>
+        </div>
       </Box>
 
       <Box
@@ -62,20 +63,21 @@ const NewPaymentPage = () => {
           marginTop: '5px',
         }}
       >
-        <Typography>
+        <Typography variant="h6" gutterBottom>
           Balance Due: Rs {amount}
         </Typography>
 
-        {/* Display QR Code */}
-        <Box sx={{ textAlign: 'center', marginY: 2 }}>
-          <img
-            src="./qrCode.png" // Replace this with the actual QR code image source
-            alt="QR Code for Payment"
-            style={{ width: '200px', height: '200px' }} // Adjust the size as necessary
-          />
-        </Box>
+        {/* Include the QRCodeComponent and pass the amount as a prop */}
+        <QRCodeComponent amount={amount} />
 
-        <Button variant="contained" color="primary" type="submit" onClick={handleSubmit} fullWidth>
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          onClick={handleSubmit}
+          fullWidth
+          disabled={!amount} // Disable button if amount is not available
+        >
           Inform Admin
         </Button>
 

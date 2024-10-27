@@ -42,3 +42,28 @@ export const fetchPaymentsByTenant = async (tenantId) => {
         alert('Could not fetch payment logs.');
     }
 };
+
+// src/services/paymentService.js
+
+export const fetchQRCode = async (amount) => {
+    try {
+        // Make sure to encode the amount to handle special characters
+        const encodedAmount = encodeURIComponent(amount);
+
+        // Make a request to your backend to fetch the QR code
+        const response = await fetch(`${API_URL}/newPayment/qrcode?amount=${encodedAmount}`);
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch QR Code');
+        }
+
+        // Get the response as a blob to handle binary data
+        const blob = await response.blob();
+
+        // Create a URL for the blob and return it
+        return URL.createObjectURL(blob);
+    } catch (error) {
+        console.error('Error fetching QR code:', error);
+        throw error; // Re-throw the error to be handled by the calling function
+    }
+};

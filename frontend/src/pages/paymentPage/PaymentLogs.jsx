@@ -42,8 +42,8 @@ const PaymentLogs = ({ tenantId }) => {
                         throw new Error('Unexpected response format');
                     }
                 } catch (error) {
-                    console.error('Error fetching payments:', error);
-                    setError('Failed to load payment logs. Please try again later.');
+                    console.error('No payments made yet:', error);
+                    setError('No payments made yet.');
                 } finally {
                     setIsLoading(false);
                 }
@@ -59,7 +59,7 @@ const PaymentLogs = ({ tenantId }) => {
         switch (method.toLowerCase()) {
             case 'cash':
                 return theme.palette.success.main;
-            case 'creditcard':
+            case 'UPI':
                 return theme.palette.info.main;
             case 'debitcard':
                 return theme.palette.warning.main;
