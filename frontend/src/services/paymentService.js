@@ -4,7 +4,7 @@ import axios from 'axios';
 // Function to send payment notification email to the admin
 export const sendPaymentNotification = async (adminEmail, tenantName, amount) => {
     try {
-        const response = await axios.post('http://localhost:5000/api/newPayment/send-payment-notification', {
+        const response = await axios.post('pg-management-system-cggicjt95.vercel.app/api/newPayment/send-payment-notification', {
             adminEmail,
             tenantName,
             amount,
@@ -19,7 +19,7 @@ export const sendPaymentNotification = async (adminEmail, tenantName, amount) =>
 
 // api.js
 
-const API_URL = 'http://localhost:5000/api'; // Your API base URL
+const API_URL = 'pg-management-system-cggicjt95.vercel.app/api'; // Your API base URL
 
 export const submitPayment = async (paymentData) => {
     try {
