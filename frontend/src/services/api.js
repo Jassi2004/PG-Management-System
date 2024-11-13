@@ -1,7 +1,7 @@
 // src/services/api.js
 import axios from 'axios';
 
-const API_URL = 'pg-management-system-cggicjt95.vercel.app/api'; // Change based on your backend URL
+const API_URL = 'https://pg-management-system.onrender.com/api'; // Change based on your backend URL
 
 export const fetchDashboardData = async () => {
     const token = localStorage.getItem('token'); // Get the token from local storage

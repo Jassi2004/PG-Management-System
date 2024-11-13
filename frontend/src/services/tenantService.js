@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Replace with actual backend API URLs
-const BASE_URL = 'pg-management-system-cggicjt95.vercel.app/api';
+const BASE_URL = 'https://pg-management-system.onrender.com/api';
 
 export const getTenants = async () => {
   return await axios.get(`${BASE_URL}/tenants`);
