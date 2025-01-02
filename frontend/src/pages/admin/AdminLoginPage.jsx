@@ -15,10 +15,12 @@ function AdminLoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      console.log("submitting login form");
+
       const response = await loginAdmin(formData);
       const { token } = response.data;
       // console.log(token);
-      
+
 
       // Store token in localStorage
       localStorage.setItem('token', token);

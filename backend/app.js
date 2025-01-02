@@ -23,7 +23,11 @@ connectDB(); // Call the function to connect to the database
 
 // Use the cors middleware
 app.use(cors({
-  origin: 'http://localhost:5173', // Allow requests from your frontend
+  origin: ['http://localhost:5173',
+    'pg-management-system.vercel.app',
+    'pg-management-system-git-main-jaskirat-singhs-projects-211a0a66.vercel.app',
+    'pg-management-system-4ivgw2jzw.vercel.app'],
+  // Allow requests from your frontend
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow the necessary HTTP methods
   credentials: true, // Enable credentials (optional)
 }));

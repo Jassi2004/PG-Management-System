@@ -1,7 +1,8 @@
 import axios from "axios";
 
 // Replace with actual backend API URLs
-const BASE_URL = `https://pg-management-system.onrender.com/api`;
+// const BASE_URL = `https://pg-management-system.onrender.com/api`;
+const BASE_URL = `http://localhost:5000/api`;
 
 export const loginAdmin = async (adminData) => {
   return await axios.post(`${BASE_URL}/admin/login`, adminData);
