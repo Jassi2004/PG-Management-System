@@ -25,7 +25,8 @@ connectDB(); // Call the function to connect to the database
 app.use(cors({
   origin: [
     'https://pg-management-system-git-main-jaskirat-singhs-projects-211a0a66.vercel.app',
-    'http://localhost:5173',
+    'https://pg-management-system-git-main-jaskirat-singhs-projects-211a0a66.vercel.app',
+    // 'http://localhost:5173',
     'pg-management-system.vercel.app',
     'pg-management-system-git-main-jaskirat-singhs-projects-211a0a66.vercel.app',
     'pg-management-system-4ivgw2jzw.vercel.app'],
