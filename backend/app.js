@@ -21,6 +21,8 @@ app.use(express.json()); // Middleware to parse JSON requests
 // Connect to MongoDB
 connectDB(); // Call the function to connect to the database
 
+
+
 // Use the cors middleware
 app.use(cors({
   origin: [
@@ -30,6 +32,11 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow the necessary HTTP methods
   credentials: true, // Enable credentials (optional)
 }));
+
+app.use((req, res, next) => {
+  console.log('Incoming request origin:', req.headers.origin);
+  next();
+});
 
 app.use('/api/tenants', tenantRoutes);
 
